@@ -8,7 +8,7 @@ exports.productById = (req, res, next, id) => {
   Product.findById(id).exec((err, product) => {
     if (err || !product) {
       return res.status(400).json({
-        error: "No product found",
+        error: "No Product Found",
       });
     }
     req.product = product;
