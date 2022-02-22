@@ -26,7 +26,7 @@ exports.create = (req, res) => {
   form.keepExtensions = true;
   form.parse(req, (err, fields, files) => {
     if (err) {
-      console.log(err)
+      console.log(err);
       return res.status(400).json({
         error: "Image could not be uploaded",
       });
@@ -160,6 +160,27 @@ exports.list = (req, res) => {
           error: "No Product Found",
         });
       }
-      res.send(products);
+      res.json(products);
+    });
+};
+
+/**
+ * find the product base on req product category
+ * List product with same category
+ */
+
+exports.listRelated = (req, res) => {
+  let limit = req.query.limit ? parseInt(req.query.limit) : 6;
+
+  Product.find({ _id: { $ne: req.product }, category: req.product.category })
+    .limit(limit)
+    .populate("category", "_id name")
+    .exec((err, products) => {
+      if (err) {
+        return res.status(400).json({
+          error: "No Product Found",
+        });
+      }
+      res.json(products);
     });
 };
